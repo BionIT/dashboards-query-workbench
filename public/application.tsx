@@ -11,8 +11,8 @@ import { AppPluginStartDependencies } from './types';
 import { WorkbenchApp } from './components/app';
 
 export const renderApp = (
-  { notifications, http, chrome }: CoreStart,
-  { navigation }: AppPluginStartDependencies,
+  { notifications, http, chrome, savedObjects }: CoreStart,
+  { navigation, dataSource }: AppPluginStartDependencies,
   { appBasePath, element }: AppMountParameters
 ) => {
   ReactDOM.render(
@@ -22,6 +22,8 @@ export const renderApp = (
       http={http}
       navigation={navigation}
       chrome={chrome}
+      savedObjects={savedObjects}
+      dataSourceEnabled={!!dataSource}
     />,
     element
   );

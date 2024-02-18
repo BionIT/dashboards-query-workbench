@@ -20,6 +20,8 @@ interface WorkbenchAppDeps {
   http: CoreStart['http'];
   navigation: NavigationPublicPluginStart;
   chrome: CoreStart['chrome'];
+  savedObjects: CoreStart['savedObjects'];
+  dataSourceEnabled: boolean;
 }
 
 export const WorkbenchApp = ({
@@ -28,6 +30,8 @@ export const WorkbenchApp = ({
   http,
   navigation,
   chrome,
+  savedObjects,
+  dataSourceEnabled,
 }: WorkbenchAppDeps) => {
   return (
     <HashRouter>
@@ -46,6 +50,9 @@ export const WorkbenchApp = ({
                       setBreadcrumbs={chrome.setBreadcrumbs}
                       isAccelerationFlyoutOpen={false}
                       urlDataSource=""
+                      notifications={notifications}
+                      savedObjects={savedObjects}
+                      dataSourceEnabled={dataSourceEnabled}
                     />
                   )}
                 />
@@ -59,6 +66,9 @@ export const WorkbenchApp = ({
                       setBreadcrumbs={chrome.setBreadcrumbs}
                       isAccelerationFlyoutOpen={false}
                       urlDataSource={props.match.params.dataSource}
+                      notifications={notifications}
+                      savedObjects={savedObjects}
+                      dataSourceEnabled={dataSourceEnabled}
                     />
                   )}
                 />
@@ -72,6 +82,9 @@ export const WorkbenchApp = ({
                       setBreadcrumbs={chrome.setBreadcrumbs}
                       isAccelerationFlyoutOpen={true}
                       urlDataSource={props.match.params.dataSource}
+                      notifications={notifications}
+                      savedObjects={savedObjects}
+                      dataSourceEnabled={dataSourceEnabled}
                     />
                   )}
                 />

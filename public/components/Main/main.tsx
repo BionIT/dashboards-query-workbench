@@ -21,7 +21,7 @@ import {
 import { IHttpResponse } from 'angular';
 import _ from 'lodash';
 import React from 'react';
-import { ChromeBreadcrumb, CoreStart } from '../../../../../src/core/public';
+import { ChromeBreadcrumb, CoreStart, NotificationsStart, SavedObjectsStart } from '../../../../../src/core/public';
 import {
   ASYNC_QUERY_ENDPOINT,
   ASYNC_QUERY_JOB_ENDPOINT,
@@ -45,6 +45,7 @@ import { CreateButton } from '../SQLPage/CreateButton';
 import { DataSelect } from '../SQLPage/DataSelect';
 import { SQLPage } from '../SQLPage/SQLPage';
 import { TableView } from '../SQLPage/table_view';
+import { ClusterSelector } from '../../../../../src/plugins/data_source_management/public';
 
 interface ResponseData {
   ok: boolean;
@@ -97,6 +98,9 @@ interface MainProps {
   setBreadcrumbs: (newBreadcrumbs: ChromeBreadcrumb[]) => void;
   isAccelerationFlyoutOpen: boolean;
   urlDataSource: string;
+  savedObjects: SavedObjectsStart;
+  notifications: NotificationsStart;
+  dataSourceEnabled: boolean;
 }
 
 interface MainState {
@@ -124,6 +128,7 @@ interface MainState {
   refreshTree: boolean;
   isAccelerationFlyoutOpened: boolean;
   isCallOutVisible: boolean;
+  selectedDataConnectionId: string;
 }
 
 const SUCCESS_MESSAGE = 'Success';
@@ -386,10 +391,14 @@ export class Main extends React.Component<MainProps, MainState> {
     const language = this.state.language;
     if (queries.length > 0) {
       const endpoint = '/api/sql_console/' + (_.isEqual(language, 'SQL') ? 'sqlquery' : 'pplquery');
+      let query = {};
+      if (this.props.dataSourceEnabled) {
+        query = {dataSourceId: this.state.selectedDataConnectionId};
+      }
       const responsePromise = Promise.all(
-        queries.map((query: string) =>
+        queries.map((payload: string) =>
           this.httpClient
-            .post(endpoint, { body: JSON.stringify({ query }) })
+            .post(endpoint, { body: JSON.stringify({ query: payload }), query })
             .catch((error: any) => {
               this.setState({
                 messages: [
@@ -849,6 +858,11 @@ export class Main extends React.Component<MainProps, MainState> {
     });
   };
 
+  onSelectedDataSource = (e) => {
+    const dataConnectionId = e[0] ? e[0].id : undefined;
+    this.setState({ selectedDataConnectionId: dataConnectionId });
+  }
+
   render() {
     let page;
     let link;
@@ -948,6 +962,14 @@ export class Main extends React.Component<MainProps, MainState> {
         <EuiFlexGroup direction="row" alignItems="center">
           <EuiFlexItem>
             <EuiText>Data Sources</EuiText>
+            {this.props.dataSourceEnabled && (<ClusterSelector 
+              savedObjectsClient={this.props.savedObjects.client}
+              notifications={this.props.notifications} 
+              onSelectedDataSource={this.onSelectedDataSource}
+              disabled={false} 
+              hideLocalCluster={false} 
+              fullWidth={true}              
+            />)}
             <DataSelect
               http={this.httpClient}
               onSelect={this.handleDataSelect}
@@ -1011,6 +1033,8 @@ export class Main extends React.Component<MainProps, MainState> {
                       selectedItems={this.state.selectedDatasource}
                       updateSQLQueries={this.updateSQLQueries}
                       refreshTree={this.state.refreshTree}
+                      selectedDataSourceId={this.state.selectedDataConnectionId}
+                      dataSourceEnabled={this.props.dataSourceEnabled}
                     />
                     <EuiSpacer />
                   </EuiFlexItem>

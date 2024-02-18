@@ -42,9 +42,11 @@ interface CustomView {
   selectedItems: EuiComboBoxOptionOption[];
   updateSQLQueries: (query: string) => void;
   refreshTree: boolean;
+  selectedDataSourceId: string;
+  dataSourceEnabled: boolean;
 }
 
-export const TableView = ({ http, selectedItems, updateSQLQueries, refreshTree }: CustomView) => {
+export const TableView = ({ http, selectedItems, updateSQLQueries, refreshTree, selectedDataSourceId, dataSourceEnabled }: CustomView) => {
   const [tableNames, setTableNames] = useState<string[]>([]);
   const [_selectedDatabase, setSelectedDatabase] = useState<string>('');
   const [_selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -107,9 +109,16 @@ export const TableView = ({ http, selectedItems, updateSQLQueries, refreshTree }
         status: 'Query is run',
       });
       const query = { query: LOAD_OPENSEARCH_INDICES_QUERY };
+      let reqQuery = {};
+
+      if (dataSourceEnabled) {
+        reqQuery = {dataSourceId: selectedDataSourceId};
+      }
+
       http
         .post(FETCH_OPENSEARCH_INDICES_PATH, {
           body: JSON.stringify(query),
+          query: reqQuery,
         })
         .then((res) => {
           const responseObj = JSON.parse(res.data.resp);
