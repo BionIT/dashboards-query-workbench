@@ -45,7 +45,9 @@ import { CreateButton } from '../SQLPage/CreateButton';
 import { DataSelect } from '../SQLPage/DataSelect';
 import { SQLPage } from '../SQLPage/SQLPage';
 import { TableView } from '../SQLPage/table_view';
-import { ClusterSelector } from '../../../../../src/plugins/data_source_management/public';
+import { DataSourceManagementPluginSetup } from '../../../../../src/plugins/data_source_management/public';
+import { coreRefs } from '../../framework/core_refs';
+import { AuthType } from '../../../../../src/plugins/data_source/common/data_sources';
 
 interface ResponseData {
   ok: boolean;
@@ -101,6 +103,7 @@ interface MainProps {
   savedObjects: SavedObjectsStart;
   notifications: NotificationsStart;
   dataSourceEnabled: boolean;
+  dataSourceManagement: DataSourceManagementPluginSetup
 }
 
 interface MainState {
@@ -962,13 +965,13 @@ export class Main extends React.Component<MainProps, MainState> {
         <EuiFlexGroup direction="row" alignItems="center">
           <EuiFlexItem>
             <EuiText>Data Sources</EuiText>
-            {this.props.dataSourceEnabled && (<ClusterSelector 
+            {this.props.dataSourceEnabled && (<this.props.dataSourceManagement.getDataSourcePicker 
               savedObjectsClient={this.props.savedObjects.client}
               notifications={this.props.notifications} 
               onSelectedDataSource={this.onSelectedDataSource}
               disabled={false} 
               hideLocalCluster={false} 
-              fullWidth={true}              
+              fullWidth={false}             
             />)}
             <DataSelect
               http={this.httpClient}

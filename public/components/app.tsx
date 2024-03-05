@@ -13,6 +13,7 @@ import { CoreStart } from '../../../../src/core/public';
 import { NavigationPublicPluginStart } from '../../../../src/plugins/navigation/public';
 
 import { Main } from './Main';
+import { DataSourceManagementPluginSetup } from '../../../../src/plugins/data_source_management/public';
 
 interface WorkbenchAppDeps {
   basename: string;
@@ -22,6 +23,7 @@ interface WorkbenchAppDeps {
   chrome: CoreStart['chrome'];
   savedObjects: CoreStart['savedObjects'];
   dataSourceEnabled: boolean;
+  dataSourceManagement: DataSourceManagementPluginSetup
 }
 
 export const WorkbenchApp = ({
@@ -32,6 +34,7 @@ export const WorkbenchApp = ({
   chrome,
   savedObjects,
   dataSourceEnabled,
+  dataSourceManagement,
 }: WorkbenchAppDeps) => {
   return (
     <HashRouter>
@@ -53,6 +56,7 @@ export const WorkbenchApp = ({
                       notifications={notifications}
                       savedObjects={savedObjects}
                       dataSourceEnabled={dataSourceEnabled}
+                      dataSourceManagement={dataSourceManagement}
                     />
                   )}
                 />
@@ -69,6 +73,7 @@ export const WorkbenchApp = ({
                       notifications={notifications}
                       savedObjects={savedObjects}
                       dataSourceEnabled={dataSourceEnabled}
+                      dataSourceManagement={dataSourceManagement}
                     />
                   )}
                 />
@@ -85,6 +90,7 @@ export const WorkbenchApp = ({
                       notifications={notifications}
                       savedObjects={savedObjects}
                       dataSourceEnabled={dataSourceEnabled}
+                      dataSourceManagement={dataSourceManagement}
                     />
                   )}
                 />

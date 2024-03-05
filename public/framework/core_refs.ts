@@ -5,6 +5,7 @@
 
 import { ApplicationStart, ChromeStart, HttpStart, IToasts } from '../../../../src/core/public';
 import { SavedObjectsClientContract } from '../../../../src/core/public';
+import { DataSourcePluginStart } from '../../../../src/plugins/data_source/public';
 
 class CoreRefs {
   private static _instance: CoreRefs;
@@ -14,6 +15,7 @@ class CoreRefs {
   public toasts?: IToasts;
   public chrome?: ChromeStart;
   public application?: ApplicationStart;
+  public dataSource?: DataSourcePluginStart;
   private constructor() {
     // ...
   }
