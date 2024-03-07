@@ -47,7 +47,6 @@ import { SQLPage } from '../SQLPage/SQLPage';
 import { TableView } from '../SQLPage/table_view';
 import { DataSourceManagementPluginSetup } from '../../../../../src/plugins/data_source_management/public';
 import { coreRefs } from '../../framework/core_refs';
-import { AuthType } from '../../../../../src/plugins/data_source/common/data_sources';
 
 interface ResponseData {
   ok: boolean;
@@ -960,18 +959,21 @@ export class Main extends React.Component<MainProps, MainState> {
       );
     }
 
+    const DataSourceSelector = this.props.dataSourceManagement.getDataSourcePicker;
+
     return (
       <>
         <EuiFlexGroup direction="row" alignItems="center">
           <EuiFlexItem>
             <EuiText>Data Sources</EuiText>
-            {this.props.dataSourceEnabled && (<this.props.dataSourceManagement.getDataSourcePicker 
+            {this.props.dataSourceEnabled && (<DataSourceSelector 
               savedObjectsClient={this.props.savedObjects.client}
               notifications={this.props.notifications} 
               onSelectedDataSource={this.onSelectedDataSource}
               disabled={false} 
               hideLocalCluster={false} 
-              fullWidth={false}             
+              fullWidth={false}
+              filterFn={(ds) => ds.attributes.auth.type !== 'no_auth'}             
             />)}
             <DataSelect
               http={this.httpClient}
