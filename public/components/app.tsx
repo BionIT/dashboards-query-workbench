@@ -9,7 +9,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 
 import { EuiPage, EuiPageBody } from '@elastic/eui';
 
-import { CoreStart } from '../../../../src/core/public';
+import { CoreStart, MountPoint } from '../../../../src/core/public';
 import { NavigationPublicPluginStart } from '../../../../src/plugins/navigation/public';
 
 import { Main } from './Main';
@@ -23,7 +23,8 @@ interface WorkbenchAppDeps {
   chrome: CoreStart['chrome'];
   savedObjects: CoreStart['savedObjects'];
   dataSourceEnabled: boolean;
-  dataSourceManagement: DataSourceManagementPluginSetup
+  dataSourceManagement: DataSourceManagementPluginSetup;
+  setActionMenu: (menuMount: MountPoint | undefined) => void;
 }
 
 export const WorkbenchApp = ({
@@ -35,6 +36,7 @@ export const WorkbenchApp = ({
   savedObjects,
   dataSourceEnabled,
   dataSourceManagement,
+  setActionMenu,
 }: WorkbenchAppDeps) => {
   return (
     <HashRouter>
@@ -57,6 +59,7 @@ export const WorkbenchApp = ({
                       savedObjects={savedObjects}
                       dataSourceEnabled={dataSourceEnabled}
                       dataSourceManagement={dataSourceManagement}
+                      setActionMenu={setActionMenu}
                     />
                   )}
                 />
@@ -74,6 +77,7 @@ export const WorkbenchApp = ({
                       savedObjects={savedObjects}
                       dataSourceEnabled={dataSourceEnabled}
                       dataSourceManagement={dataSourceManagement}
+                      setActionMenu={setActionMenu}
                     />
                   )}
                 />
@@ -91,6 +95,7 @@ export const WorkbenchApp = ({
                       savedObjects={savedObjects}
                       dataSourceEnabled={dataSourceEnabled}
                       dataSourceManagement={dataSourceManagement}
+                      setActionMenu={setActionMenu}
                     />
                   )}
                 />

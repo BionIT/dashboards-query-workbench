@@ -21,7 +21,7 @@ import {
 import { IHttpResponse } from 'angular';
 import _ from 'lodash';
 import React from 'react';
-import { ChromeBreadcrumb, CoreStart, NotificationsStart, SavedObjectsStart } from '../../../../../src/core/public';
+import { ChromeBreadcrumb, CoreStart, MountPoint, NotificationsStart, SavedObjectsStart } from '../../../../../src/core/public';
 import {
   ASYNC_QUERY_ENDPOINT,
   ASYNC_QUERY_JOB_ENDPOINT,
@@ -102,7 +102,8 @@ interface MainProps {
   savedObjects: SavedObjectsStart;
   notifications: NotificationsStart;
   dataSourceEnabled: boolean;
-  dataSourceManagement: DataSourceManagementPluginSetup
+  dataSourceManagement: DataSourceManagementPluginSetup;
+  setActionMenu: (menuMount: MountPoint | undefined) => void;
 }
 
 interface MainState {
@@ -959,14 +960,28 @@ export class Main extends React.Component<MainProps, MainState> {
       );
     }
 
-    const DataSourceSelector = this.props.dataSourceManagement.getDataSourcePicker;
+    const DataSourceSelector = this.props.dataSourceManagement.ui.DataSourceSelector;
+
+    const DataSourceMenu = this.props.dataSourceManagement.ui.DataSourceMenu;
 
     return (
       <>
+      <DataSourceMenu
+        setMenuMountPoint={this.props.setActionMenu}
+        showDataSourceSelectable={true}
+        dataSourceCallBackFunc={({id, label}) => this.onSelectedDataSource([{id, label}])}
+        disableDataSourceSelectable={false}
+        savedObjects={this.props.savedObjects.client}
+        notifications={this.props.notifications}
+        appName={'queryWorkbench'}
+        hideLocalCluster={true}
+        selectedOption={[{label: 'data sources', id: 'a'}]}
+        fullWidth={true}
+      />
         <EuiFlexGroup direction="row" alignItems="center">
           <EuiFlexItem>
             <EuiText>Data Sources</EuiText>
-            {this.props.dataSourceEnabled && (<DataSourceSelector 
+            {/* {this.props.dataSourceEnabled && (<DataSourceSelector 
               savedObjectsClient={this.props.savedObjects.client}
               notifications={this.props.notifications} 
               onSelectedDataSource={this.onSelectedDataSource}
@@ -974,7 +989,7 @@ export class Main extends React.Component<MainProps, MainState> {
               hideLocalCluster={false} 
               fullWidth={false}
               filterFn={(ds) => ds.attributes.auth.type !== 'no_auth'}             
-            />)}
+            />)} */}
             <DataSelect
               http={this.httpClient}
               onSelect={this.handleDataSelect}

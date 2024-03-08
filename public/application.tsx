@@ -14,7 +14,7 @@ import { DataSourceManagementPluginSetup } from '../../../src/plugins/data_sourc
 export const renderApp = (
   { notifications, http, chrome, savedObjects }: CoreStart,
   { navigation, dataSource }: AppPluginStartDependencies,
-  { appBasePath, element }: AppMountParameters,
+  { appBasePath, element, setHeaderActionMenu }: AppMountParameters,
   dataSourceManagement: DataSourceManagementPluginSetup
 ) => {
   ReactDOM.render(
@@ -27,6 +27,7 @@ export const renderApp = (
       savedObjects={savedObjects}
       dataSourceEnabled={!!dataSource}
       dataSourceManagement={dataSourceManagement}
+      setActionMenu={setHeaderActionMenu}
     />,
     element
   );
