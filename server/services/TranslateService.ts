@@ -3,12 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger } from "../../../../src/core/server";
+
 
 export default class TranslateService {
   private client: any;
   private dataSourceEnabled: boolean;
 
-  constructor(client: any, dataSourceEnabled: boolean) {
+  constructor(client: any, dataSourceEnabled: boolean, logger: Logger) {
     this.client = client;
     this.dataSourceEnabled = dataSourceEnabled;
   }

@@ -54,7 +54,7 @@ export const AccelerationDataSourceSelector = ({
       query = {dataSourceId: selectedDataSourceId};
     }
     http
-      .get(`/api/get_datasources?`, {query})
+      .get(`/api/get_datasources`, {query})
       .then((res) => {
         const data = res.data.resp;
         setDataConnections(
@@ -64,7 +64,7 @@ export const AccelerationDataSourceSelector = ({
         );
       })
       .catch((err) => {
-        console.error(err);
+        console.error(`${err} for data source ${selectedDataSourceId}`);
         setToast(`ERROR: failed to load datasources`, 'danger');
       });
     setLoadingComboBoxes({ ...loadingComboBoxes, dataSource: false });

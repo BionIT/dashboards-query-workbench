@@ -7,15 +7,18 @@
 import 'core-js/stable';
 import _ from 'lodash';
 import 'regenerator-runtime/runtime';
+import { Logger } from '../../../../src/core/server';
 
 
 export default class QueryService {
   private client: any;
   private dataSourceEnabled: boolean;
+  private logger: Logger;
 
-  constructor(client: any, dataSourceEnabled: boolean) {
+  constructor(client: any, dataSourceEnabled: boolean, logger: Logger) {
     this.client = client;
     this.dataSourceEnabled = dataSourceEnabled;
+    this.logger = logger;
   }
 
   describeQueryPostInternal = async (request: any, format: string, responseFormat: string, body: any, context: any) => {
@@ -29,6 +32,8 @@ export default class QueryService {
 
       const {dataSourceId} = request.query;
 
+      this.logger.info(`inside describeQueryPostInternal data source id is ${dataSourceId}`);
+      
       if (this.dataSourceEnabled && dataSourceId) {
         client = context.dataSource.opensearch.legacy.getClient(dataSourceId);
         queryResponse = await client.callAPI(format, params);
@@ -43,7 +48,11 @@ export default class QueryService {
         },
       };
     } catch (err) {
-      console.log(err);
+      this.logger.info('error describeQueryPostInternal');
+      this.logger.info(err);
+      this.logger.info(request.query);
+
+      console.log(err, request.query);
       return {
         data: {
           ok: false,
@@ -62,6 +71,8 @@ export default class QueryService {
       if (this.dataSourceEnabled) {
         const {dataSourceId} = request.query;
 
+        this.logger.info(`inside describeQueryJobIdInternal data source id is ${dataSourceId}`);
+
         client = context.dataSource.opensearch.legacy.getClient(dataSourceId);
         queryResponse = await client.callAPI(format, {
           jobId: jobId,
@@ -78,7 +89,11 @@ export default class QueryService {
         },
       };
     } catch (err) {
-      console.log(err);
+      this.logger.info('error describeQueryJobIdInternal');
+      this.logger.info(err);
+      this.logger.info(request.query);
+
+      console.log(err, request.query);
       return {
         data: {
           ok: false,
@@ -94,7 +109,7 @@ export default class QueryService {
       let client = this.client;
       let queryResponse;
       const {dataSourceId} = request.query;
-
+      this.logger.info(`inside describeQueryGetInternalSync data source id is ${dataSourceId}`);
 
       if (this.dataSourceEnabled && dataSourceId) {
         client = context.dataSource.opensearch.legacy.getClient(dataSourceId);
@@ -109,7 +124,11 @@ export default class QueryService {
         },
       };
     } catch (err) {
-      console.log(err);
+      this.logger.info('error describeQueryGetInternalSync');
+      this.logger.info(err);
+      this.logger.info(request.query);
+
+      console.log(err, request.query);
       return {
         data: {
           ok: false,

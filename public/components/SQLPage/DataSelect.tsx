@@ -29,7 +29,7 @@ export const DataSelect = ({ http, onSelect, urlDataSource, asyncLoading, dataSo
       query = {dataSourceId};
     }
     http
-      .get(`/api/get_datasources?`, {query})
+      .get(`/api/get_datasources`, {query})
       .then((res) => {
         const data = res.data.resp;
 
@@ -70,7 +70,7 @@ export const DataSelect = ({ http, onSelect, urlDataSource, asyncLoading, dataSo
         }
       })
       .catch((err) => {
-        console.error(err);
+        console.error(`${err} for data source ${dataSourceId}`);
       });
   };
 
