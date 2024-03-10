@@ -17,6 +17,7 @@ interface AccelerationDataSourceSelectorProps {
   accelerationFormData: CreateAccelerationForm;
   setAccelerationFormData: React.Dispatch<React.SetStateAction<CreateAccelerationForm>>;
   selectedDatasource: EuiComboBoxOptionOption[];
+  selectedDataSourceId?: string;
 }
 
 export const AccelerationDataSourceSelector = ({
@@ -24,6 +25,7 @@ export const AccelerationDataSourceSelector = ({
   accelerationFormData,
   setAccelerationFormData,
   selectedDatasource,
+  selectedDataSourceId,
 }: AccelerationDataSourceSelectorProps) => {
   const { setToast } = useToast();
   const [dataConnections, setDataConnections] = useState<Array<EuiComboBoxOptionOption<string>>>(
@@ -46,8 +48,13 @@ export const AccelerationDataSourceSelector = ({
 
   const loadDataSource = () => {
     setLoadingComboBoxes({ ...loadingComboBoxes, dataSource: true });
+    let query = {};
+
+    if (selectedDataSourceId) {
+      query = {dataSourceId: selectedDataSourceId};
+    }
     http
-      .get(`/api/get_datasources`)
+      .get(`/api/get_datasources?`, {query})
       .then((res) => {
         const data = res.data.resp;
         setDataConnections(
@@ -70,12 +77,13 @@ export const AccelerationDataSourceSelector = ({
       query: `SHOW SCHEMAS IN \`${accelerationFormData.dataSource}\``,
       datasource: accelerationFormData.dataSource,
     };
+
     const errorMessage = `ERROR: failed to load databases`;
-    getJobId(selectedDataConnection[0].label, query, http, (id: string) => {
+    getJobId(selectedDataConnection[0].label, query, http, selectedDataSourceId, (id: string) => {
       if (id === undefined) {
         setToast(errorMessage, 'danger');
       } else {
-        pollQueryStatus(id, http, (data: { status: string; results: any[] }) => {
+        pollQueryStatus(id, http, selectedDataSourceId, (data: { status: string; results: any[] }) => {
           if (data.status === 'SUCCESS') {
             let databaseOptions: Array<EuiComboBoxOptionOption<string>> = [];
             if (data.results.length > 0)
@@ -100,11 +108,11 @@ export const AccelerationDataSourceSelector = ({
       datasource: accelerationFormData.dataSource,
     };
     const errorMessage = `ERROR: failed to load tables`;
-    getJobId(selectedDataConnection[0].label, query, http, (id: string) => {
+    getJobId(selectedDataConnection[0].label, query, http, selectedDataSourceId, (id: string) => {
       if (id === undefined) {
         setToast(errorMessage, 'danger');
       } else {
-        pollQueryStatus(id, http, (data: { status: string; results: any[] }) => {
+        pollQueryStatus(id, http, selectedDataSourceId, (data: { status: string; results: any[] }) => {
           if (data.status === 'SUCCESS') {
             let dataTableOptions: Array<EuiComboBoxOptionOption<string>> = [];
             if (data.results.length > 0)

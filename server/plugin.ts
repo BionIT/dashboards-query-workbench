@@ -40,16 +40,15 @@ export class WorkbenchPlugin implements Plugin<WorkbenchPluginSetup, WorkbenchPl
 
     let client: ILegacyClusterClient | undefined = undefined;
 
-    if (!dataSourceEnabled) {
-      client = core.opensearch.legacy.createClient(
-        'query_workbench',
-        {
-          plugins: [sqlPlugin]
-        }
-      )
-    } else {
-      dataSource.registerCustomApiSchema(sqlPlugin)
-    }
+    client = core.opensearch.legacy.createClient(
+      'query_workbench',
+      {
+        plugins: [sqlPlugin]
+      }
+    )
+  
+    dataSource.registerCustomApiSchema(sqlPlugin)
+    
 
     // Register server side APIs
     defineRoutes(router, client, core.opensearch, dataSourceEnabled);

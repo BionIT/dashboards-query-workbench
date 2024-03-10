@@ -27,9 +27,9 @@ export default class QueryService {
       let client = this.client;
       let queryResponse;
 
-      if (this.dataSourceEnabled) {
-        const {dataSourceId} = request.query;
+      const {dataSourceId} = request.query;
 
+      if (this.dataSourceEnabled && dataSourceId) {
         client = context.dataSource.opensearch.legacy.getClient(dataSourceId);
         queryResponse = await client.callAPI(format, params);
       } else {
@@ -93,10 +93,10 @@ export default class QueryService {
     try {
       let client = this.client;
       let queryResponse;
+      const {dataSourceId} = request.query;
 
-      if (this.dataSourceEnabled) {
-        const {dataSourceId} = request.query;
 
+      if (this.dataSourceEnabled && dataSourceId) {
         client = context.dataSource.opensearch.legacy.getClient(dataSourceId);
         queryResponse = await client.callAPI(format);
       } else {

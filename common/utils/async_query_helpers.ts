@@ -26,6 +26,7 @@ export const getJobId = (
   currentDataSource: string,
   query: {},
   http: CoreStart['http'],
+  dataSourceId?: string,
   callback
 ) => {
   http
@@ -34,6 +35,7 @@ export const getJobId = (
         ...query,
         sessionId: getAsyncSessionId(currentDataSource) ?? undefined,
       }),
+      query: {dataSourceId},
     })
     .then((res) => {
       const id = res.data.resp.queryId;
@@ -48,9 +50,9 @@ export const getJobId = (
     });
 };
 
-export const pollQueryStatus = (id: string, http: CoreStart['http'], callback) => {
+export const pollQueryStatus = (id: string, http: CoreStart['http'], dataSourceId, callback) => {
   http
-    .get(ASYNC_QUERY_JOB_ENDPOINT + id)
+    .get(ASYNC_QUERY_JOB_ENDPOINT + id, {query: {dataSourceId }})
     .then((res) => {
       const status = res.data.resp.status.toLowerCase();
       if (
@@ -60,7 +62,7 @@ export const pollQueryStatus = (id: string, http: CoreStart['http'], callback) =
         status === 'waiting'
       ) {
         callback({ status });
-        setTimeout(() => pollQueryStatus(id, http, callback), POLL_INTERVAL_MS);
+        setTimeout(() => pollQueryStatus(id, http, dataSourceId, callback), POLL_INTERVAL_MS);
       } else if (status === 'failed') {
         const results = res.data.resp;
         callback({ status: 'FAILED', error: results.error });

@@ -463,6 +463,9 @@ export class Main extends React.Component<MainProps, MainState> {
                 datasource: currentDataSource,
                 sessionId: getAsyncSessionId(currentDataSource) ?? undefined,
               }),
+              query: {
+                dataSourceId: this.state.selectedDataConnectionId
+              },
             })
             .catch((error: any) => {
               this.setState({
@@ -529,7 +532,9 @@ export class Main extends React.Component<MainProps, MainState> {
 
   callGetStartPolling = async (queries: string[]) => {
     const nextP = this.httpClient
-      .get(ASYNC_QUERY_JOB_ENDPOINT + this.state.asyncJobId)
+      .get(ASYNC_QUERY_JOB_ENDPOINT + this.state.asyncJobId, {query: {
+        dataSourceId: this.state.selectedDataConnectionId
+      }},)
       .catch((error: any) => {
         this.setState({
           messages: [
@@ -661,7 +666,9 @@ export class Main extends React.Component<MainProps, MainState> {
       Promise.all(
         queries.map((query: string) =>
           this.httpClient
-            .post('/api/sql_console/sqljson', { body: JSON.stringify({ query }) })
+            .post('/api/sql_console/sqljson', { body: JSON.stringify({ query }), query: {
+              dataSourceId: this.state.selectedDataConnectionId
+            } })
             .catch((error: any) => {
               this.setState({
                 messages: [
@@ -695,7 +702,9 @@ export class Main extends React.Component<MainProps, MainState> {
       Promise.all(
         queries.map((query: string) =>
           this.httpClient
-            .post(endpoint, { body: JSON.stringify({ query }) })
+            .post(endpoint, { body: JSON.stringify({ query }), query: {
+              dataSourceId: this.state.selectedDataConnectionId
+            }, })
             .catch((error: any) => {
               this.setState({
                 messages: [
@@ -729,7 +738,9 @@ export class Main extends React.Component<MainProps, MainState> {
       Promise.all(
         queries.map((query: string) =>
           this.httpClient
-            .post(endpoint, { body: JSON.stringify({ query }) })
+            .post(endpoint, { body: JSON.stringify({ query }), query: {
+              dataSourceId: this.state.selectedDataConnectionId
+            }, })
             .catch((error: any) => {
               this.setState({
                 messages: [
@@ -763,7 +774,9 @@ export class Main extends React.Component<MainProps, MainState> {
       Promise.all(
         queries.map((query: string) =>
           this.httpClient
-            .post(endpoint, { body: JSON.stringify({ query }) })
+            .post(endpoint, { body: JSON.stringify({ query }), query: {
+              dataSourceId: this.state.selectedDataConnectionId
+            }, })
             .catch((error: any) => {
               this.setState({
                 messages: [
@@ -974,8 +987,7 @@ export class Main extends React.Component<MainProps, MainState> {
         savedObjects={this.props.savedObjects.client}
         notifications={this.props.notifications}
         appName={'queryWorkbench'}
-        hideLocalCluster={true}
-        selectedOption={[{label: 'data sources', id: 'a'}]}
+        hideLocalCluster={false}
         fullWidth={true}
       />
         <EuiFlexGroup direction="row" alignItems="center">
@@ -995,6 +1007,7 @@ export class Main extends React.Component<MainProps, MainState> {
               onSelect={this.handleDataSelect}
               urlDataSource={this.props.urlDataSource}
               asyncLoading={this.state.asyncLoading}
+              dataSourceId={this.state.selectedDataConnectionId}
             />
             <EuiSpacer />
           </EuiFlexItem>

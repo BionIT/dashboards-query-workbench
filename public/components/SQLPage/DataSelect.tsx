@@ -12,9 +12,10 @@ interface CustomView {
   onSelect: (selectedItems: []) => void;
   urlDataSource: string;
   asyncLoading: boolean;
+  dataSourceId: string;
 }
 
-export const DataSelect = ({ http, onSelect, urlDataSource, asyncLoading }: CustomView) => {
+export const DataSelect = ({ http, onSelect, urlDataSource, asyncLoading, dataSourceId }: CustomView) => {
   const [selectedOptions, setSelectedOptions] = useState<EuiComboBoxOptionOption[]>([
     { label: 'OpenSearch' },
   ]);
@@ -23,8 +24,12 @@ export const DataSelect = ({ http, onSelect, urlDataSource, asyncLoading }: Cust
   const datasources = () => {
     let dataOptions: EuiComboBoxOptionOption[] = [];
     let urlSourceFound = false;
+    let query = {};
+    if (dataSourceId) {
+      query = {dataSourceId};
+    }
     http
-      .get(`/api/get_datasources`)
+      .get(`/api/get_datasources?`, {query})
       .then((res) => {
         const data = res.data.resp;
 
@@ -71,7 +76,7 @@ export const DataSelect = ({ http, onSelect, urlDataSource, asyncLoading }: Cust
 
   useEffect(() => {
     datasources();
-  }, []);
+  }, [dataSourceId]);
 
   const handleSelectionChange = (selectedItems: any[]) => {
     if (selectedItems.length > 0) {

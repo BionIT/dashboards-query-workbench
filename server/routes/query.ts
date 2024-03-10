@@ -45,6 +45,9 @@ export default function query(server: IRouter, service: QueryService, openSearch
       path: ROUTE_PATH_PPL_QUERY,
       validate: {
         body: schema.any(),
+        query: schema.object({
+          dataSourceId: schema.maybe(schema.string({ defaultValue: '' }))
+        })
       },
     },
     async (context, request, response): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
@@ -60,6 +63,9 @@ export default function query(server: IRouter, service: QueryService, openSearch
       path: ROUTE_PATH_SQL_CSV,
       validate: {
         body: schema.any(),
+        query: schema.object({
+          dataSourceId: schema.maybe(schema.string({ defaultValue: '' }))
+        })
       },
     },
     async (context, request, response): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
@@ -75,6 +81,9 @@ export default function query(server: IRouter, service: QueryService, openSearch
       path: ROUTE_PATH_PPL_CSV,
       validate: {
         body: schema.any(),
+        query: schema.object({
+          dataSourceId: schema.maybe(schema.string({ defaultValue: '' }))
+        })
       },
     },
     async (context, request, response): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
@@ -105,6 +114,9 @@ export default function query(server: IRouter, service: QueryService, openSearch
       path: ROUTE_PATH_PPL_JSON,
       validate: {
         body: schema.any(),
+        query: schema.object({
+          dataSourceId: schema.maybe(schema.string({ defaultValue: '' }))
+        })
       },
     },
     async (context, request, response): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
@@ -120,6 +132,9 @@ export default function query(server: IRouter, service: QueryService, openSearch
       path: ROUTE_PATH_SQL_TEXT,
       validate: {
         body: schema.any(),
+        query: schema.object({
+          dataSourceId: schema.maybe(schema.string({ defaultValue: '' }))
+        })
       },
     },
     async (context, request, response): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
@@ -135,6 +150,9 @@ export default function query(server: IRouter, service: QueryService, openSearch
       path: ROUTE_PATH_PPL_TEXT,
       validate: {
         body: schema.any(),
+        query: schema.object({
+          dataSourceId: schema.maybe(schema.string({ defaultValue: '' }))
+        })
       },
     },
     async (context, request, response): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
@@ -150,6 +168,9 @@ export default function query(server: IRouter, service: QueryService, openSearch
       path: ROUTE_PATH_SPARK_SQL_QUERY,
       validate: {
         body: schema.any(),
+        query: schema.object({
+          dataSourceId: schema.maybe(schema.string({ defaultValue: '' }))
+        })
       },
     },
     async (context, request, response): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
@@ -167,6 +188,9 @@ export default function query(server: IRouter, service: QueryService, openSearch
         params: schema.object({
           id: schema.string(),
         }),
+        query: schema.object({
+          dataSourceId: schema.maybe(schema.string({ defaultValue: '' }))
+        })
       },
     },
     async (context, request, response): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
@@ -182,8 +206,11 @@ export default function query(server: IRouter, service: QueryService, openSearch
       path: ROUTE_PATH_SPARK_SQL_JOB_QUERY + "/{id}",
       validate: {
         params: schema.object({
-          id: schema.string(),
+          query: schema.string(),
         }),
+        query: schema.object({
+          dataSourceId: schema.maybe(schema.string({ defaultValue: '' }))
+        })
       },
     },
     async (context, request, response): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
@@ -198,7 +225,9 @@ export default function query(server: IRouter, service: QueryService, openSearch
     {
       path: ROUTE_PATH_GET_DATASOURCES,
       validate: {
-
+        query: schema.object({
+          dataSourceId: schema.maybe(schema.string({ defaultValue: '' }))
+        })
       },
     },
     async (context, request, response): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
