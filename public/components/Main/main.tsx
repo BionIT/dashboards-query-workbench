@@ -977,21 +977,18 @@ export class Main extends React.Component<MainProps, MainState> {
 
     const DataSourceMenu = this.props.dataSourceManagement?.ui?.DataSourceMenu;
 
-    console.log("why", this.props.dataSourceEnabled)
-
     return (
       <>
       {this.props.dataSourceEnabled &&<DataSourceMenu
         setMenuMountPoint={this.props.setActionMenu}
-        showDataSourceMultiSelectable={true}
-        // activeDatasourceIds={['', '2ebf9800-de8c-11ee-a337-0d2eee284153']}
+        showDataSourceAggregatedView={true}
+        activeDatasourceIds={['', '2ebf9800-de8c-11ee-a337-0d2eee284153']}
         savedObjects={this.props.savedObjects.client}
         notifications={this.props.notifications}
         appName={'queryWorkbench'}
         hideLocalCluster={false}
         fullWidth={true}
-        selectedDataSourcesCallBackFunc={(ds) => console.log("hey", ds)}
-        // displayAllCompatibleDataSources={true}
+        displayAllCompatibleDataSources={false}
       />}
         <EuiFlexGroup direction="row" alignItems="center">
           <EuiFlexItem>
