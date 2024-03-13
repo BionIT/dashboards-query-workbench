@@ -982,13 +982,12 @@ export class Main extends React.Component<MainProps, MainState> {
       {this.props.dataSourceEnabled &&<DataSourceMenu
         setMenuMountPoint={this.props.setActionMenu}
         showDataSourceAggregatedView={true}
-        activeDatasourceIds={['', '2ebf9800-de8c-11ee-a337-0d2eee284153']}
         savedObjects={this.props.savedObjects.client}
         notifications={this.props.notifications}
         appName={'queryWorkbench'}
         hideLocalCluster={false}
         fullWidth={true}
-        displayAllCompatibleDataSources={false}
+        displayAllCompatibleDataSources={true}
       />}
         <EuiFlexGroup direction="row" alignItems="center">
           <EuiFlexItem>
