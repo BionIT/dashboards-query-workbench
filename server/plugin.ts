@@ -47,7 +47,9 @@ export class WorkbenchPlugin implements Plugin<WorkbenchPluginSetup, WorkbenchPl
       }
     )
   
-    dataSource.registerCustomApiSchema(sqlPlugin)
+    if (dataSourceEnabled) {
+      dataSource.registerCustomApiSchema(sqlPlugin)
+    }
     
     // Register server side APIs
     defineRoutes(router, client, core.opensearch, dataSourceEnabled, this.logger);

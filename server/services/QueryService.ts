@@ -7,7 +7,7 @@
 import 'core-js/stable';
 import _ from 'lodash';
 import 'regenerator-runtime/runtime';
-import { Logger } from '../../../../src/core/server';
+import { Logger, RequestHandlerContext } from '../../../../src/core/server';
 
 
 export default class QueryService {
@@ -21,7 +21,7 @@ export default class QueryService {
     this.logger = logger;
   }
 
-  describeQueryPostInternal = async (request: any, format: string, responseFormat: string, body: any, context: any) => {
+  describeQueryPostInternal = async (request: any, format: string, responseFormat: string, body: any, context: RequestHandlerContext) => {
     try {
       const params = {
         body: JSON.stringify(body),
